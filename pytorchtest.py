@@ -44,5 +44,5 @@ test[0,2]=c
 yf=model(data).clone().detach()
 print(yf)
 for i in range(2000):
-    error=yf[i]/(a*x[i]*x[i]+b*x[i]+c)-1
+    error=abs(yf[i]/(a*x[i]*x[i]+b*x[i]+c)-1)
 print(torch.max(error))

@@ -40,6 +40,6 @@ test=torch.ones(1,4)
 test[0,0]=a
 test[0,1]=b
 test[0,2]=c
-test[0,3]=1
+test[0,3]=input()
 yf=model(test)
 print(yf)

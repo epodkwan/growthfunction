@@ -41,7 +41,8 @@ test=torch.ones(1,4)
 test[0,0]=a
 test[0,1]=b
 test[0,2]=c
-print("Input x:")
-test[0,3]=float(input())
-yf=model(data)
+yf=model(data).clone().detach()
 print(yf)
+for i in range(2000):
+    error=yf[i]/(a*x[i]*x[i]+b*x[i]+c)-1
+print(torch.max(error))

@@ -41,6 +41,5 @@ print("Training ended")
 # %%
 yf=model(data).clone().detach()
 print(yf)
-for i in range(2000):
-    error=abs(yf[i]/(a*x[i]*x[i]+b*x[i]+c)-1)
-print("Max error=",torch.max(error))
+error=abs(yf/(a*x*x+b*x+c)-1)
+print("Max error =",torch.max(error).item()*100,"%")

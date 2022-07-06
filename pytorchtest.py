@@ -16,13 +16,15 @@ data[:,3]=x
 
 # %%
 model=torch.nn.Sequential(
-    torch.nn.Linear(4,16),
+    torch.nn.Linear(4,8),
     torch.nn.ReLU(),
-    torch.nn.Linear(16,1),
+    torch.nn.Linear(8,4),
+    torch.nn.ReLU(),
+    torch.nn.Linear(4,1),
     torch.nn.Flatten(0, 1)
 )
 loss_fn=torch.nn.MSELoss(reduction='sum')
-learning_rate=1e-5
+learning_rate=1e-6
 
 # %%
 for t in range(5000):

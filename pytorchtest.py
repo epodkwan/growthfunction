@@ -18,13 +18,14 @@ data[:,3]=x
 model=torch.nn.Sequential(
     torch.nn.Linear(4,8),
     torch.nn.ReLU(),
-    torch.nn.Linear(8,4),
-    torch.nn.ReLU(),
-    torch.nn.Linear(4,1),
+    torch.nn.Linear(8,1),
     torch.nn.Flatten(0, 1)
 )
+
+# %%
 loss_fn=torch.nn.MSELoss(reduction='sum')
-learning_rate=1e-6
+learning_rate=1e-5
+optimizer=torch.optim.SGD(model.parameters(),lr=learning_rate)
 
 # %%
 for t in range(5000):
@@ -32,11 +33,9 @@ for t in range(5000):
     loss=loss_fn(y_pred, y)
     if t % 100 == 99:
         print(t,loss.item())
-    model.zero_grad()
+    optimizer.zero_grad()
     loss.backward()
-    with torch.no_grad():
-        for param in model.parameters():
-            param-=learning_rate*param.grad
+    optimizer.step()
 print("Training ended")
 
 # %%

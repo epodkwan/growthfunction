@@ -43,5 +43,5 @@ test[0,1]=b
 test[0,2]=c
 print("Input x:")
 test[0,3]=float(input())
-yf=model(test)
+yf=model(data)
 print(yf)

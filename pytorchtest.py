@@ -23,7 +23,7 @@ model=torch.nn.Sequential(
     torch.nn.Flatten(0, 1)
 )
 loss_fn=torch.nn.MSELoss(reduction='sum')
-learning_rate=1e-6
+learning_rate=1e-5
 
 # %%
 for t in range(5000):
@@ -37,12 +37,10 @@ for t in range(5000):
         for param in model.parameters():
             param-=learning_rate*param.grad
 print("Training ended")
-test=torch.ones(1,4)
-test[0,0]=a
-test[0,1]=b
-test[0,2]=c
+
+# %%
 yf=model(data).clone().detach()
 print(yf)
 for i in range(2000):
     error=abs(yf[i]/(a*x[i]*x[i]+b*x[i]+c)-1)
-print(torch.max(error))
+print("Max error="torch.max(error))

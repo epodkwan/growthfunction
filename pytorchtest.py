@@ -17,19 +17,21 @@ data[:,3]=x
 
 # %%
 model=torch.nn.Sequential(
-    torch.nn.Linear(4,8),
+    torch.nn.Linear(4,16),
     torch.nn.ReLU(),
-    torch.nn.Linear(8,1),
+    torch.nn.Linear(16,256),
+    torch.nn.ReLU(),
+    torch.nn.Linear(256,1),
     torch.nn.Flatten(0, 1)
 )
 
 # %%
 loss_fn=torch.nn.MSELoss(reduction='sum')
-learning_rate=1e-5
+learning_rate=1e-6
 optimizer=torch.optim.SGD(model.parameters(),lr=learning_rate)
 
 # %%
-for t in range(5000):
+for t in range(10000):
     y_pred=model(data)
     loss=loss_fn(y_pred, y)
     if t % 100 == 99:

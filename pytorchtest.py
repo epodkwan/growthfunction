@@ -9,11 +9,10 @@ b=2
 c=3
 y=a*x*x+b*x+c
 data=torch.ones(2000,4)
-for i in range(2000):
-    data[i,0]=a
-    data[i,1]=b
-    data[i,2]=c
-    data[i,3]=x[i]
+data[:,0]=a
+data[:,1]=b
+data[:,2]=c
+data[:,3]=x
 
 # %%
 model=torch.nn.Sequential(
@@ -41,5 +40,5 @@ print("Training ended")
 # %%
 yf=model(data).clone().detach()
 print(yf)
-error=abs(yf/(a*x*x+b*x+c)-1)
+error=abs(yf/y-1)
 print("Max error =",torch.max(error).item()*100,"%")

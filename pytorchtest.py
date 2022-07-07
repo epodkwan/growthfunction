@@ -29,7 +29,7 @@ model=torch.nn.Sequential(
 # %%
 loss_fn=torch.nn.MSELoss(reduction='sum')
 learning_rate=1e-6
-epochs=10000
+epochs=5000
 optimizer=torch.optim.SGD(model.parameters(),lr=learning_rate,momentum=0.9)
 
 # %%
@@ -38,10 +38,15 @@ for t in range(epochs):
     loss=loss_fn(y_pred, y)
     if t % 100 == 99:
         print(t,loss.item())
+        plt.scatter(t,loss.item())
     optimizer.zero_grad()
     loss.backward()
     optimizer.step()
 print("Training ended")
+plt.xlabel("Iteration")
+plt.ylabel("Loss")
+plt.title("Loss function")
+plt.show()
 
 # %%
 yf=model(data).clone().detach()

@@ -9,15 +9,15 @@ a=1
 b=2
 c=3
 y=a*x*x+b*x+c
-data=torch.ones(2000,4)
-data[:,0]=a
-data[:,1]=b
-data[:,2]=c
-data[:,3]=x
+data=torch.ones(2000,1)
+# data[:,0]=a
+# data[:,1]=b
+# data[:,2]=c
+data[:,0]=x
 
 # %%
 model=torch.nn.Sequential(
-    torch.nn.Linear(4,16),
+    torch.nn.Linear(1,16),
     torch.nn.ReLU(),
     torch.nn.Linear(16,256),
     torch.nn.ReLU(),
@@ -52,5 +52,11 @@ plt.plot(x,yf,label='Fitting')
 plt.xlabel("x")
 plt.ylabel("y")
 plt.title("Comparison")
+plt.legend()
+plt.show()
+plt.plot(x,error,label='Error')
+plt.xlabel("x")
+plt.ylabel("Error")
+plt.title("Error")
 plt.legend()
 plt.show()

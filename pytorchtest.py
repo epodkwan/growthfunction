@@ -2,6 +2,7 @@
 import torch
 import math
 import matplotlib.pyplot as plt
+torch.set_num_threads(8)
 
 # %%
 x=torch.linspace(-math.pi,math.pi,2000)
@@ -47,14 +48,13 @@ yf=model(data).clone().detach()
 print(yf)
 error=abs(yf/y-1)
 print("Max error =",torch.max(error).item()*100,"%")
-plt.subplot(211)
+ax1=plt.subplot(211)
 plt.plot(x,y,label='Reference')
 plt.plot(x,yf,label='Fitting')
-plt.xlabel("x")
 plt.ylabel("y")
 plt.title("Comparison")
 plt.legend()
-plt.subplot(212)
+plt.subplot(212,sharex=ax1)
 plt.plot(x,error,label='Error')
 plt.xlabel("x")
 plt.ylabel("Error")

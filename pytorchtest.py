@@ -5,16 +5,20 @@ import matplotlib.pyplot as plt
 torch.set_num_threads(8)
 
 # %%
-x=torch.linspace(-math.pi,math.pi,2000)
-a=1
-b=2
-c=3
-y=a*x*x+b*x+c
+def func(x):
+    a=-1
+    b=2
+    c=-5
+    return a*x*x+b*x+c
+
+# %%
+x_data=torch.linspace(-math.pi,math.pi,2000)
+y_data=func(x_data)
 data=torch.ones(2000,1)
 # data[:,0]=a
 # data[:,1]=b
 # data[:,2]=c
-data[:,0]=x
+data[:,0]=x_data
 
 # %%
 model=torch.nn.Sequential(
@@ -35,7 +39,7 @@ optimizer=torch.optim.SGD(model.parameters(),lr=learning_rate,momentum=0.9)
 # %%
 for t in range(epochs):
     y_pred=model(data)
-    loss=loss_fn(y_pred, y)
+    loss=loss_fn(y_pred,y_data)
     if t % 100 == 99:
         print(t,loss.item())
         plt.scatter(t,loss.item())
@@ -49,18 +53,22 @@ plt.title("Loss function")
 plt.show()
 
 # %%
-yf=model(data).clone().detach()
-print(yf)
-error=abs(yf/y-1)
+test=torch.ones(600,1)
+test_x=torch.linspace(-3,3,600)
+test[:,0]=test_x
+true_y=func(test_x)
+test_y=model(test).clone().detach()
+print(test_y)
+error=abs(test_y/true_y-1)
 print("Max error =",torch.max(error).item()*100,"%")
 plt.subplot(211)
-plt.plot(x,y,label='Reference')
-plt.plot(x,yf,label='Fitting')
+plt.plot(test_x,true_y,label='Reference')
+plt.plot(test_x,test_y,label='Fitting')
 plt.ylabel("y")
 plt.title("Comparison")
 plt.legend()
 plt.subplot(212)
-plt.plot(x,error,label='Error')
+plt.plot(test_x,error,label='Error')
 plt.xlabel("x")
 plt.ylabel("Error")
 plt.title("Error")

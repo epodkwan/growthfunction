@@ -7,7 +7,7 @@ h0=70
 omm=0.3
 omde=0.7
 p=[-3,0,-2]
-ai=0.001
+a_initial=0.001
 omlam=1-omm-omde
 om=[omm,omde,omlam]
 par=[om,p]
@@ -34,17 +34,17 @@ def rk4(x0,y0,dx):
     return y0+(k[0]+4*k[1]+k[3])*dx/6
 
 # %%
-def integration(x0,xf,dx):
-    x=x0
+def integration(x_initial,x_final,dx):
+    x=x_initial
     y=0
-    while x<xf:
+    while x<x_final:
         y=rk4(x,y,dx)
         x=x+dx
     return y
 
 # %%
 def growth(a):
-    temp=integration(ai,a,0.001)
+    temp=integration(a_initial,a,0.001)
     return 5*omm/2*h0*h0*calh(a)*temp
 
 # %%
@@ -60,8 +60,3 @@ def plotgraph():
 # %%
 print("Growth factor=")
 plotgraph()
-
-# %%
-
-
-

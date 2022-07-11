@@ -6,11 +6,11 @@ from nbodykit.cosmology import background
 # %%
 h0=70
 om_m=0.3
-om_de=0.7
+om_lam=0.7
 p=[-3,0,-2]
 a_initial=0.001
-om_lam=1-om_m-om_de
-om=[om_m,om_de,om_lam]
+om_k=1-om_m-om_lam
+om=[om_m,om_lam,om_k]
 par=[om,p]
 
 # %%
@@ -60,10 +60,11 @@ def plotgraph():
 
 # %%
 def error():
-    test=background.MatterDominated(om_m,om_lam,om_de,a=None,a_normalize=1.0)
+    test=background.MatterDominated(om_m,om_lam,om_k,a=None,a_normalize=1.0)
     a=0.01
+    temp=growth(1)
     while a<=1:
-        plt.scatter(a,growth(a)/test.D1(a)-1)
+        plt.scatter(a,growth(a)/temp/test.D1(a)-1)
         a=a+0.01
     plt.show()
 

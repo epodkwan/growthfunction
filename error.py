@@ -54,8 +54,11 @@ def error():
     a=0.01
     temp=growth(1)
     while a<=1:
-        plt.scatter(a,growth(a)/temp/test.D1(a)-1)
+        plt.scatter(a,growth(a)/temp/test.D1(a)-1,c="b")
         a=a+0.01
+    plt.xlabel("a")
+    plt.ylabel("Error (*100%)")
+    plt.title("Growth Function Error")
     plt.show()
 
 # %%

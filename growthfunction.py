@@ -7,7 +7,7 @@ h0=70
 om_m=0.3
 om_de=0.7
 p=[-3,0,-2]
-a_initial=0.001
+a_initial=0.00001
 om_lam=1-om_m-om_de
 om=[om_m,om_de,om_lam]
 par=[om,p]
@@ -44,7 +44,7 @@ def integration(x_initial,x_final,dx):
 
 # %%
 def growth(a):
-    temp=integration(a_initial,a,0.001)
+    temp=integration(a_initial,a,0.00001)
     return 5*om_m/2*h0*h0*calh(a)*temp
 
 # %%
@@ -52,9 +52,12 @@ def plotgraph():
     a=0.01
     temp=growth(1)
     while a<=1:
-        plt.scatter(a,growth(a)/temp)
+        plt.scatter(a,growth(a)/temp,c="b")
         a=a+0.01
     plt.ticklabel_format(useOffset=False)
+    plt.xlabel("a")
+    plt.ylabel("D")
+    plt.title("Growth Function")
     plt.show()
 
 # %%

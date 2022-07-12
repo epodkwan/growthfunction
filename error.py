@@ -49,16 +49,6 @@ def growth(a):
     return 5*om_m/2*h0*h0*calh(a)*temp
 
 # %%
-def plotgraph():
-    a=0.01
-    temp=growth(1)
-    while a<=1:
-        plt.scatter(a,growth(a)/temp)
-        a=a+0.01
-    plt.ticklabel_format(useOffset=False)
-    plt.show()
-
-# %%
 def error():
     test=background.MatterDominated(om_m,om_lam,om_k,a=None,a_normalize=1.0)
     a=0.01

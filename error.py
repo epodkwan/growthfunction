@@ -8,7 +8,7 @@ h0=70
 om_m=0.3
 om_lam=0.7
 p=[-3,0,-2]
-a_initial=0.001
+a_initial=0.00001
 om_k=1-om_m-om_lam
 om=[om_m,om_lam,om_k]
 par=[om,p]
@@ -45,7 +45,7 @@ def integration(x_initial,x_final,dx):
 
 # %%
 def growth(a):
-    temp=integration(a_initial,a,0.001)
+    temp=integration(a_initial,a,0.00001)
     return 5*om_m/2*h0*h0*calh(a)*temp
 
 # %%

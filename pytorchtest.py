@@ -1,6 +1,6 @@
 # %%
-import torch
 import math
+import torch
 import matplotlib.pyplot as plt
 torch.set_num_threads(8)
 
@@ -47,6 +47,7 @@ for t in range(epochs):
     loss.backward()
     optimizer.step()
 print("Training ended")
+torch.save(model,'model.pth')
 plt.xlabel("Iteration")
 plt.ylabel("ln(loss)")
 plt.title("Loss function")

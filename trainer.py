@@ -15,7 +15,7 @@ om=[om_m,om_lam,om_k]
 par=[om,p]
 
 # %%
-def calh(a):
+def calh(a,par):
     total=0
     for i in range(3):
         total=total+par[0][i]*a**par[1][i]
@@ -23,43 +23,45 @@ def calh(a):
     return h
 
 # %%
-def func(a):
-    temp=1/a/calh(a)
+def func(a,par):
+    temp=1/a/calh(a,par)
     return temp*temp*temp
 
 # %%
-def rk4(x0,y0,dx):
+def rk4(x0,y0,dx,par):
     k=[0,0,0,0]
-    k[0]=func(x0)
-    k[1]=func(x0+dx/2)
-    k[3]=func(x0+dx)
+    k[0]=func(x0,par)
+    k[1]=func(x0+dx/2,par)
+    k[3]=func(x0+dx,par)
     return y0+(k[0]+4*k[1]+k[3])*dx/6
 
 # %%
-def integration(x_initial,x_final,dx):
+def integration(x_initial,x_final,dx,par):
     x=x_initial
     y=0
     while x<x_final:
-        y=rk4(x,y,dx)
+        y=rk4(x,y,dx,par)
         x=x+dx
     return y
 
 # %%
-def growth(a):
-    temp=integration(a_initial,a,0.00001)
-    return 5*om_m/2*h0*h0*calh(a)*temp
+def growth(a,par):
+    temp=integration(a_initial,a,0.00001,par)
+    return 5*par[0][0]/2*h0*h0*calh(a,par)*temp
 
 # %%
-def normalize(a):
-    return growth(a)/growth(1)
+def normalize(a,par1,par0):
+    return growth(a,par1)/growth(1,par0)
 
 # %%
-x_data=torch.linspace(0.01,1,2000)
-y_data=normalize(x_data)
-data=torch.ones(2000,5)
+x_data=torch.linspace(0.01,1,200)
+y_data=x_data
+for i in range(200):
+    y_data[i]=normalize(x_data[i],par,par)
+data=torch.ones(200,5)
 data[:,0]=om_m
-data[:,1]=om_
-data[:,2]=om[2]
+data[:,1]=om_lam
+data[:,2]=om_k
 data[:,3]=h0
 data[:,4]=x_data
 
@@ -97,10 +99,16 @@ plt.title("Loss function")
 plt.show()
 
 # %%
-test=torch.ones(600,1)
-test_x=torch.linspace(0.01,1,600)
-test[:,0]=test_x
-true_y=normalize(test_x)
+test=torch.ones(100,5)
+test_x=torch.linspace(0.01,1,100)
+test[:,0]=om_m
+test[:,1]=om_lam
+test[:,2]=om_k
+test[:,3]=h0
+test[:,4]=test_x
+true_y=test_x
+for i in range(100):
+    true_y[i]=normalize(test_x[i],par,par)
 test_y=model(test).clone().detach()
 print(test_y)
 error=abs(test_y/true_y-1)

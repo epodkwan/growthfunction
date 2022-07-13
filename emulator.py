@@ -5,6 +5,13 @@ import matplotlib.pyplot as plt
 torch.set_num_threads(8)
 
 # %%
+def func(x):
+    a=-1
+    b=2
+    c=-5
+    return a*x*x+b*x+c
+
+# %%
 model=torch.load('model.pth')
 model.eval()
 

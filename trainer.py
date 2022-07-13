@@ -58,22 +58,18 @@ x_data=torch.linspace(0.01,1,200)
 y_data=torch.ones(200)
 for i in range(200):
     y_data[i]=normalize(x_data[i],par,par)
-plt.plot(x_data,y_data)
-plt.show()
-data=torch.ones(200,5)
+data=torch.ones(200,3)
 data[:,0]=om_m
-data[:,1]=om_lam
-data[:,2]=om_k
-data[:,3]=h0
-data[:,4]=x_data
+data[:,1]=h0
+data[:,2]=x_data
 
 # %%
 model=torch.nn.Sequential(
-    torch.nn.Linear(5,32),
+    torch.nn.Linear(3,16),
     torch.nn.ReLU(),
-    torch.nn.Linear(32,512),
+    torch.nn.Linear(16,256),
     torch.nn.ReLU(),
-    torch.nn.Linear(512,1),
+    torch.nn.Linear(256,1),
     torch.nn.Flatten(0, 1)
 )
 
@@ -101,13 +97,11 @@ plt.title("Loss function")
 plt.show()
 
 # %%
-test=torch.ones(100,5)
+test=torch.ones(100,3)
 test_x=torch.linspace(0.01,1,100)
 test[:,0]=om_m
-test[:,1]=om_lam
-test[:,2]=om_k
-test[:,3]=h0
-test[:,4]=test_x
+test[:,1]=h0
+test[:,2]=test_x
 true_y=torch.ones(100)
 for i in range(100):
     true_y[i]=normalize(test_x[i],par,par)

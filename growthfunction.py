@@ -61,5 +61,4 @@ def plotgraph():
     plt.show()
 
 # %%
-print("Growth factor=")
 plotgraph()

@@ -7,7 +7,11 @@ model=torch.load('model.pth')
 model.eval()
 
 # %%
-
+data=torch.ones(2000,1)
+data[:,0]=a
+data[:,1]=b
+data[:,2]=c
+data[:,3]=x_data
 
 # %%
 test=torch.ones(600,1)

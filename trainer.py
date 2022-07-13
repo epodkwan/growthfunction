@@ -55,7 +55,7 @@ def normalize(a,par1,par0):
 
 # %%
 x_data=torch.linspace(0.01,1,200)
-y_data=x_data
+y_data=torch.ones(200)
 for i in range(200):
     y_data[i]=normalize(x_data[i],par,par)
 plt.plot(x_data,y_data)
@@ -108,7 +108,7 @@ test[:,1]=om_lam
 test[:,2]=om_k
 test[:,3]=h0
 test[:,4]=test_x
-true_y=test_x
+true_y=torch.ones(100)
 for i in range(100):
     true_y[i]=normalize(test_x[i],par,par)
 test_y=model(test).clone().detach()

@@ -5,11 +5,11 @@ import matplotlib.pyplot as plt
 # %%
 h0=70
 om_m=0.3
-om_de=0.7
+om_lam=0.7
 p=[-3,0,-2]
 a_initial=0.00001
-om_lam=1-om_m-om_de
-om=[om_m,om_de,om_lam]
+om_k=1-om_m-om_lam
+om=[om_m,om_lam,om_k]
 par=[om,p]
 
 # %%

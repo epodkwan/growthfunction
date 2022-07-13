@@ -58,6 +58,8 @@ x_data=torch.linspace(0.01,1,200)
 y_data=x_data
 for i in range(200):
     y_data[i]=normalize(x_data[i],par,par)
+plt.plot(x_data,y_data)
+plt.show()
 data=torch.ones(200,5)
 data[:,0]=om_m
 data[:,1]=om_lam
@@ -116,12 +118,12 @@ print("Max error =",torch.max(error).item()*100,"%")
 plt.subplot(211)
 plt.plot(test_x,true_y,label='Reference')
 plt.plot(test_x,test_y,label='Fitting')
-plt.ylabel("y")
+plt.ylabel("D")
 plt.title("Comparison")
 plt.legend()
 plt.subplot(212)
 plt.plot(test_x,error,label='Error')
-plt.xlabel("x")
+plt.xlabel("a")
 plt.ylabel("Error (*100%)")
 plt.title("Error")
 plt.show()

@@ -19,18 +19,18 @@ for i in range(900):
 
 # %%
 model=torch.nn.Sequential(
-    torch.nn.Linear(2,64),
-    torch.nn.ReLU(),
-    torch.nn.Linear(64,128),
+    torch.nn.Linear(2,128),
     torch.nn.ReLU(),
     torch.nn.Linear(128,256),
+    torch.nn.ReLU(),
+    torch.nn.Linear(256,256),
     torch.nn.Flatten(1,-1)
 )
 
 # %%
 loss_fn=torch.nn.MSELoss(reduction='sum')
 learning_rate=1e-5
-epochs=200000
+epochs=500000
 optimizer=torch.optim.SGD(model.parameters(),lr=learning_rate,momentum=0.9)
 
 # %%
@@ -39,12 +39,12 @@ for t in range(epochs):
     loss=loss_fn(y_pred,y_train)
     if t % 100 == 99:
         print(t,loss.item())
-        plt.scatter(t,torch.log(loss.detach()),c="b")
+        plt.scatter(t,torch.log(loss.detach()),c='b')
     optimizer.zero_grad()
     loss.backward()
     optimizer.step()
 print("Training ended")
-torch.save(model,'model.pth')
+torch.save(model,"model.pth")
 plt.xlabel("Iteration")
 plt.ylabel("ln(loss)")
 plt.title("Loss function")

@@ -19,18 +19,18 @@ for i in range(900):
 
 # %%
 model=torch.nn.Sequential(
-    torch.nn.Linear(2,4),
+    torch.nn.Linear(2,64),
     torch.nn.ReLU(),
-    torch.nn.Linear(4,16),
+    torch.nn.Linear(64,128),
     torch.nn.ReLU(),
-    torch.nn.Linear(16,256),
+    torch.nn.Linear(128,256),
     torch.nn.Flatten(1,-1)
 )
 
 # %%
 loss_fn=torch.nn.MSELoss(reduction='sum')
 learning_rate=1e-6
-epochs=5000
+epochs=10000
 optimizer=torch.optim.SGD(model.parameters(),lr=learning_rate,momentum=0.9)
 
 # %%

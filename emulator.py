@@ -1,6 +1,5 @@
 # %%
 import math
-import random
 import torch
 import numpy as np
 import matplotlib.pyplot as plt
@@ -15,7 +14,7 @@ model.eval()
 
 # %%
 cosmo=npy_loader("data/cosmo.npy")
-cosmo_num=random.randrange(1000)
+cosmo_num=randrange(1000)
 parameters=torch.ones(1,2)
 parameters[:,0]=cosmo[cosmo_num,0]
 parameters[:,1]=cosmo[cosmo_num,2]
@@ -29,7 +28,7 @@ plt.xlabel("a")
 plt.ylabel("D")
 plt.title("Comparison")
 plt.legend()
-plt.savefig("cosmo"+str(cosmo_num)+".png")
+plt.safefig("cosmo"+str(cosmo_num)+".png")
 
 # plt.subplot(211)
 # plt.plot(a,d_data,label="Reference")

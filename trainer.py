@@ -11,12 +11,11 @@ def npy_loader(path):
 
 # %%
 input_data=npy_loader("data/cosmo.npy")
-x_train=torch.cat((input_data.narrow(1,0,1),input_data.narrow(1,2,1)),1).narrow(0,0,900)
+x_train=torch.cat((input_data.narrow(1,0,1),input_data.narrow(1,2,1)),1).narrow(0,0,900).float()
 y_train=torch.ones(900,256)
 for i in range(900):
     temp=npy_loader("data/"+str(i)+".npy")
     y_train[i,:]=temp[1,:]
-print(y_train)
 
 # %%
 model=torch.nn.Sequential(
@@ -25,7 +24,7 @@ model=torch.nn.Sequential(
     torch.nn.Linear(4,16),
     torch.nn.ReLU(),
     torch.nn.Linear(16,256),
-    torch.nn.Flatten(0,256)
+    torch.nn.Flatten(1,-1)
 )
 
 # %%
@@ -52,7 +51,7 @@ plt.title("Loss function")
 plt.show()
 
 # %%
-x_test=torch.cat((input_data.narrow(1,0,1),input_data.narrow(1,2,1)),1).narrow(0,900,100)
+x_test=torch.cat((input_data.narrow(1,0,1),input_data.narrow(1,2,1)),1).narrow(0,900,100).float()
 true_y=torch.ones(100)
 for i in range(100):
     true_y[i]=normalize(test_x[i],par,par)

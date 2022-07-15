@@ -15,8 +15,8 @@ model.eval()
 # %%
 cosmo=npy_loader("data/cosmo.npy")
 parameters=torch.ones(1,2)
-parameters[:,0]=0.3
-parameters[:,1]=0.7
+parameters[:,0]=0.7
+parameters[:,1]=0.3
 
 # %%
 a=torch.flatten(npy_loader("data/0.npy").narrow(0,0,1),0,-1)
@@ -26,4 +26,4 @@ plt.plot(a,d)
 plt.xlabel("a")
 plt.ylabel("D")
 plt.title("Growth Function")
-plt.show()
+plt.savefig("growthfunction.png")

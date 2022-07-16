@@ -35,3 +35,9 @@ plt.plot(a,discrepancy,label="Discrepancy")
 plt.xlabel("a")
 plt.ylabel("Predict/Data")
 plt.savefig("cosmo"+str(cosmo_num)+".png")
+for i in range(10):
+    for j in range(1000):
+        cosmo_num=j
+        d_data=torch.flatten(npy_loader("data/"+str(cosmo_num)+".npy").narrow(0,1,1),0,-1)
+        d_test=torch.flatten(model(parameters).clone().detach(),0,-1)
+    # plt.plot.pcolormesh(cosmo[:,0],cosmo[:,2],)

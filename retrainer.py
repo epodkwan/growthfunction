@@ -18,20 +18,12 @@ for i in range(900):
     y_train[i,:]=temp[1,:]
 
 # %%
-model=torch.nn.Sequential(
-    torch.nn.Linear(2,64),
-    torch.nn.ReLU(),
-    torch.nn.Linear(64,256),
-    torch.nn.ReLU(),
-    torch.nn.Linear(256,256),
-    torch.nn.ReLU(),
-    torch.nn.Linear(256,256),
-    torch.nn.Flatten(1,-1)
-)
+model=torch.load("model.pth")
+model.eval()
 
 # %%
 loss_fn=torch.nn.MSELoss(reduction='sum')
-learning_rate=1e-5
+learning_rate=1e-6
 epochs=100000
 optimizer=torch.optim.SGD(model.parameters(),lr=learning_rate,momentum=0.9)
 

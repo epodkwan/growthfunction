@@ -42,7 +42,7 @@ for j in range(1000):
     cosmo_num=j
     d_data=torch.flatten(npy_loader("data/"+str(cosmo_num)+".npy").narrow(0,1,1),0,-1)
     d_test=torch.flatten(model(parameters).clone().detach(),0,-1)
-    plt.scatter(cosmo[cosmo_num,0].item(),cosmo[cosmo_num,2].item(),c=(d_test[0]/d_data[0]-1)*100,cmap='rainbow')
+    plt.scatter(cosmo[cosmo_num,0].item(),cosmo[cosmo_num,2].item(),c=abs(d_test[0]/d_data[0]-1)*100,cmap='gray_r')
 plt.xlabel("Omega_m")
 plt.ylabel("H0")
 plt.title("Error of Cosmos")

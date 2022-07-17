@@ -32,7 +32,7 @@ model=torch.nn.Sequential(
 # %%
 loss_fn=torch.nn.MSELoss(reduction='sum')
 learning_rate=1e-5
-epochs=3500000
+epochs=4000000
 optimizer=torch.optim.SGD(model.parameters(),lr=learning_rate,momentum=0.9)
 
 # %%

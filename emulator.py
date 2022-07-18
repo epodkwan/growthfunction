@@ -49,5 +49,5 @@ for i in range(10):
     plt.colorbar()
     plt.xlabel("Omega_m")
     plt.ylabel("H0")
-    plt.title("Error of Cosmos (a="+str(a[i*28].item())+")")
+    plt.title("Error of Cosmos (a="+str(round(a[i*28].item(),3))+")")
     plt.savefig("error"+str(i)+".png")

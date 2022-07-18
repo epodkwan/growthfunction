@@ -43,7 +43,6 @@ for i in range(10):
         cosmo_num=j
         d_data=torch.flatten(npy_loader("data/"+str(cosmo_num)+".npy").narrow(0,1,1),0,-1)
         d_test=torch.flatten(model(parameters).clone().detach(),0,-1)
-        # normalize=matplotlib.colors.Normalize(vmin=0,vmax=0.05)
         plt.scatter(cosmo[cosmo_num,0].item(),cosmo[cosmo_num,2].item(),c=abs(d_test[i*28]/d_data[i*28]-1),cmap='rainbow',vmin=0,vmax=0.03)
     plt.colorbar()
     plt.xlabel("Omega_m")

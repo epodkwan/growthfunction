@@ -42,8 +42,10 @@ for i in range(10):
     for j in range(1000):
         cosmo_num=j
         d_data=torch.flatten(npy_loader("data/"+str(cosmo_num)+".npy").narrow(0,1,1),0,-1)
+        parameters[:,0]=cosmo[cosmo_num,0]
+        parameters[:,1]=cosmo[cosmo_num,2]
         d_test=torch.flatten(model(parameters).clone().detach(),0,-1)
-        plt.scatter(cosmo[cosmo_num,0].item(),cosmo[cosmo_num,2].item(),c=abs(d_test[i*28]/d_data[i*28]-1),cmap='rainbow',vmin=0,vmax=0.03)
+        plt.scatter(cosmo[cosmo_num,0].item(),cosmo[cosmo_num,2].item(),c=d_test[i*28]/d_data[i*28]-1,cmap='coolwarm',vmin=-0.03,vmax=0.03)
     plt.colorbar()
     plt.xlabel("Omega_m")
     plt.ylabel("H0")

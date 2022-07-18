@@ -37,15 +37,16 @@ plt.xlabel("a")
 plt.ylabel("Predict/Data")
 plt.legend()
 plt.savefig("cosmo"+str(cosmo_num)+".png")
-plt.clf()
-# for i in range(10):
-for j in range(1000):
-    cosmo_num=j
-    d_data=torch.flatten(npy_loader("data/"+str(cosmo_num)+".npy").narrow(0,1,1),0,-1)
-    d_test=torch.flatten(model(parameters).clone().detach(),0,-1)
-    normalize=matplotlib.colors.Normalize(vmin=0,vmax=1)
-    plt.scatter(cosmo[cosmo_num,0].item(),cosmo[cosmo_num,2].item(),c=d_test[0]/d_data[0]-1,cmap='rainbow',norm=normalize)
-plt.xlabel("Omega_m")
-plt.ylabel("H0")
-plt.title("Error of Cosmos")
-plt.savefig("error.png")
+for i in range(10):
+    plt.clf()
+    for j in range(1000):
+        cosmo_num=j
+        d_data=torch.flatten(npy_loader("data/"+str(cosmo_num)+".npy").narrow(0,1,1),0,-1)
+        d_test=torch.flatten(model(parameters).clone().detach(),0,-1)
+        normalize=matplotlib.colors.Normalize(vmin=0,vmax=1)
+        plt.scatter(cosmo[cosmo_num,0].item(),cosmo[cosmo_num,2].item(),c=d_test[i*28]/d_data[i*28]-1,cmap='rainbow',norm=normalize)
+    plt.scatter.colorbar()
+    plt.xlabel("Omega_m")
+    plt.ylabel("H0")
+    plt.title("Error of Cosmos (a="+str(a[i*28].item())+")")
+    plt.savefig("error"+str(i)+".png")

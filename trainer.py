@@ -76,7 +76,7 @@ y_test=torch.ones(100,256)
 for i in range(100):
     temp=npy_loader("data/"+str(i+900)+".npy")
     y_test[i,:]=temp[1,:]
-y_output=model(x_test).clone().detach()
-print(y_output)
-error=abs(y_output/y_test-1)
+y_pred=model(x_test).clone().detach()
+print(y_pred)
+error=abs(y_pred/y_test-1)
 print("Max error =",torch.max(error).item()*100,"%")

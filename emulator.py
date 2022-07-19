@@ -57,6 +57,7 @@ for i in range(10):
     plt.savefig("error"+str(i)+".png")
     z_plot.append(z[i*28].item())
     med.append(statistics.median(temp))
+plt.clf()
 plt.plot(z_plot,med)
 plt.xlabel("z")
 plt.ylabel("Error")

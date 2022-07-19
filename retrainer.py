@@ -28,7 +28,7 @@ model.eval()
 
 # %%
 loss_fn=torch.nn.MSELoss(reduction='sum')
-learning_rate=1e-12
+learning_rate=1e-6
 epochs=200
 optimizer=torch.optim.SGD(model.parameters(),lr=learning_rate,momentum=0.9)
 

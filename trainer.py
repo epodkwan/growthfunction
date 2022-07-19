@@ -11,15 +11,15 @@ def npy_loader(path):
 
 # %%
 input_data=npy_loader("data/cosmo.npy")
-x_train=torch.cat((input_data.narrow(1,0,1),input_data.narrow(1,2,1)),1).narrow(0,0,768).float()
-y_train=torch.ones(768,256)
-for i in range(768):
+x_train=torch.cat((input_data.narrow(1,0,1),input_data.narrow(1,2,1)),1).narrow(0,0,800).float()
+y_train=torch.ones(800,256)
+for i in range(800):
     temp=npy_loader("data/"+str(i)+".npy")
     y_train[i,:]=temp[1,:]
-x_validate=torch.cat((input_data.narrow(1,0,1),input_data.narrow(1,2,1)),1).narrow(0,768,132).float()
-y_validate=torch.ones(132,256)
-for i in range(132):
-    temp=npy_loader("data/"+str(i)+".npy")
+x_validate=torch.cat((input_data.narrow(1,0,1),input_data.narrow(1,2,1)),1).narrow(0,800,100).float()
+y_validate=torch.ones(100,256)
+for i in range(100):
+    temp=npy_loader("data/"+str(i+800)+".npy")
     y_validate[i,:]=temp[1,:]
 
 # %%
@@ -36,17 +36,17 @@ model=torch.nn.Sequential(
 
 # %%
 loss_fn=torch.nn.MSELoss(reduction='mean')
-learning_rate=1e2
-epochs=1000
+learning_rate=1e1
+epochs=5000
 optimizer=torch.optim.SGD(model.parameters(),lr=learning_rate,momentum=0.9)
 
 # %%
 for i in range(epochs):
-    order=torch.randperm(768)
+    order=torch.randperm(800)
     train_loss=0
-    for j in range(1):
-        x_batch=x_train[order[768*j:768*(j+1)-1],:]
-        y_batch=y_train[order[768*j:768*(j+1)-1],:]
+    for j in range(25):
+        x_batch=x_train[order[32*j:32*(j+1)-1],:]
+        y_batch=y_train[order[32*j:32*(j+1)-1],:]
         y_pred=model(x_batch)
         loss=loss_fn(y_pred,y_batch)
         train_loss=train_loss+loss_fn(y_pred,y_batch)
@@ -54,7 +54,7 @@ for i in range(epochs):
         loss.backward()
         optimizer.step()
     print((i+1),loss.item())
-    train_loss=train_loss/1
+    train_loss=train_loss/25
     y_pred=model(x_validate)
     validate_loss=loss_fn(y_pred,y_validate)
     plt.scatter((i+1),torch.log(train_loss.detach()),c='b')

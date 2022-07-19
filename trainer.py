@@ -57,9 +57,9 @@ for i in range(epochs):
         loss.backward()
         optimizer.step()
     print((i+1),loss.item())
-    train_loss=train_loss/32
+    train_loss=train_loss/800
     y_pred=model(x_validate)
-    validate_loss=loss_fn(y_pred,y_validate)
+    validate_loss=loss_fn(y_pred,y_validate)/100
     plt.scatter((i+1),torch.log(train_loss.detach()),c='b')
     plt.scatter((i+1),torch.log(validate_loss.detach()),c='g')
 print("Training ended")

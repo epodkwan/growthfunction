@@ -11,14 +11,14 @@ def npy_loader(path):
 
 # %%
 input_data=npy_loader("data/cosmo.npy")
-x_train=torch.cat((input_data.narrow(1,0,1),input_data.narrow(1,2,1)),1).narrow(0,0,800).float()
-y_train=torch.ones(800,256)
-for i in range(800):
+x_train=torch.cat((input_data.narrow(1,0,1),input_data.narrow(1,2,1)),1).narrow(0,0,768).float()
+y_train=torch.ones(768,256)
+for i in range(768):
     temp=npy_loader("data/"+str(i)+".npy")
     y_train[i,:]=temp[1,:]
-x_validate=torch.cat((input_data.narrow(1,0,1),input_data.narrow(1,2,1)),1).narrow(0,800,100).float()
-y_validate=torch.ones(100,256)
-for i in range(100):
+x_validate=torch.cat((input_data.narrow(1,0,1),input_data.narrow(1,2,1)),1).narrow(0,768,132).float()
+y_validate=torch.ones(132,256)
+for i in range(132):
     temp=npy_loader("data/"+str(i)+".npy")
     y_validate[i,:]=temp[1,:]
 
@@ -27,21 +27,18 @@ model=torch.load("model.pth")
 model.eval()
 
 # %%
-loss_fn=torch.nn.MSELoss(reduction='sum')
+loss_fn=torch.nn.MSELoss(reduction='mean')
 learning_rate=1e-6
-epochs=200
+epochs=1000
 optimizer=torch.optim.SGD(model.parameters(),lr=learning_rate,momentum=0.9)
 
 # %%
 for i in range(epochs):
-    order=torch.randperm(800)
-    x_batch=torch.ones(32,2)
-    y_batch=torch.ones(32,256)
+    order=torch.randperm(768)
     train_loss=0
-    for j in range(25):
-        for k in range(32):
-            x_batch[k,:]=x_train[order[32*j+k],:]
-            y_batch[k,:]=y_train[order[32*j+k],:]
+    for j in range(6):
+        x_batch=x_train[order[128*j:128*(j+1)-1],:]
+        y_batch=y_train[order[128*j:128*(j+1)-1],:]
         y_pred=model(x_batch)
         loss=loss_fn(y_pred,y_batch)
         train_loss=train_loss+loss_fn(y_pred,y_batch)
@@ -49,9 +46,9 @@ for i in range(epochs):
         loss.backward()
         optimizer.step()
     print((i+1),loss.item())
-    train_loss=train_loss/800
+    train_loss=train_loss/12
     y_pred=model(x_validate)
-    validate_loss=loss_fn(y_pred,y_validate)/100
+    validate_loss=loss_fn(y_pred,y_validate)
     plt.scatter((i+1),torch.log(train_loss.detach()),c='b')
     plt.scatter((i+1),torch.log(validate_loss.detach()),c='g')
 print("Training ended")

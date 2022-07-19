@@ -36,7 +36,7 @@ model=torch.nn.Sequential(
 
 # %%
 loss_fn=torch.nn.MSELoss(reduction='mean')
-learning_rate=1e-3
+learning_rate=1e-1
 epochs=1000
 optimizer=torch.optim.SGD(model.parameters(),lr=learning_rate,momentum=0.9)
 
@@ -44,9 +44,9 @@ optimizer=torch.optim.SGD(model.parameters(),lr=learning_rate,momentum=0.9)
 for i in range(epochs):
     order=torch.randperm(768)
     train_loss=0
-    for j in range(6):
-        x_batch=x_train[order[128*j:128*(j+1)-1],:]
-        y_batch=y_train[order[128*j:128*(j+1)-1],:]
+    for j in range(1):
+        x_batch=x_train[order[768*j:768*(j+1)-1],:]
+        y_batch=y_train[order[768*j:768*(j+1)-1],:]
         y_pred=model(x_batch)
         loss=loss_fn(y_pred,y_batch)
         train_loss=train_loss+loss_fn(y_pred,y_batch)
@@ -54,7 +54,7 @@ for i in range(epochs):
         loss.backward()
         optimizer.step()
     print((i+1),loss.item())
-    train_loss=train_loss/12
+    train_loss=train_loss/1
     y_pred=model(x_validate)
     validate_loss=loss_fn(y_pred,y_validate)
     plt.scatter((i+1),torch.log(train_loss.detach()),c='b')

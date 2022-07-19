@@ -48,7 +48,7 @@ for i in range(10):
         parameters[:,0]=cosmo[cosmo_num,0]
         parameters[:,1]=cosmo[cosmo_num,2]
         d_test=torch.flatten(model(parameters).clone().detach(),0,-1)
-        temp.append((d_test[i*28]/d_data[i*28]-1).item())
+        temp.append(d_test[i*28]/d_data[i*28]-1)
         plt.scatter(cosmo[cosmo_num,0].item(),cosmo[cosmo_num,2].item(),c=temp[-1],cmap='coolwarm',vmin=-0.02,vmax=0.02)
     plt.colorbar()
     plt.xlabel("Omega_m")
@@ -57,7 +57,7 @@ for i in range(10):
     plt.savefig("error"+str(i)+".png")
     z_plot.append(z[i*28].item())
     med.append(statistics.median(temp))
-plt.plot(z,med)
+plt.plot(z_plot,med)
 plt.xlabel("z")
 plt.ylabel("Error")
 plt.title("Median of Error")

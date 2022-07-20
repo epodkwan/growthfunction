@@ -29,7 +29,7 @@ model.eval()
 # %%
 loss_fn=torch.nn.MSELoss(reduction='mean')
 learning_rate=1e0
-epochs=5000
+epochs=20000
 optimizer=torch.optim.SGD(model.parameters(),lr=learning_rate,momentum=0.9)
 
 # %%
@@ -45,12 +45,13 @@ for i in range(epochs):
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
-    print((i+1),loss.item())
-    train_loss=train_loss/25
-    y_pred=model(x_validate)
-    validate_loss=loss_fn(y_pred,y_validate)
-    plt.scatter((i+1),torch.log(train_loss.detach()),c='b')
-    plt.scatter((i+1),torch.log(validate_loss.detach()),c='g')
+    if i % 100 == 99:
+        print((i+1),loss.item())
+        train_loss=train_loss/25
+        y_pred=model(x_validate)
+        validate_loss=loss_fn(y_pred,y_validate)
+        plt.scatter((i+1),torch.log(train_loss.detach()),c='b')
+        plt.scatter((i+1),torch.log(validate_loss.detach()),c='g')
 print("Training ended")
 torch.save(model,"model.pth")
 plt.xlabel("Epoch")

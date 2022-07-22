@@ -39,6 +39,8 @@ plt.legend()
 plt.savefig("cosmo"+str(cosmo_num)+".png")
 z_plot=[]
 med=[]
+mean_error=[]
+std=[]
 for i in range(10):
     plt.clf()
     temp=[]
@@ -48,7 +50,7 @@ for i in range(10):
         parameters[:,0]=cosmo[cosmo_num,0]
         parameters[:,1]=cosmo[cosmo_num,2]
         d_test=torch.flatten(model(parameters).clone().detach(),0,-1)
-        temp.append(d_test[i*28]/d_data[i*28]-1)
+        temp.append((d_test[i*28]/d_data[i*28]-1).item())
         plt.scatter(cosmo[cosmo_num,0].item(),cosmo[cosmo_num,2].item(),c=temp[-1],cmap='coolwarm',vmin=-0.02,vmax=0.02)
     plt.colorbar()
     plt.xlabel("Omega_m")
@@ -57,9 +59,13 @@ for i in range(10):
     plt.savefig("error"+str(i)+".png")
     z_plot.append(z[i*28].item())
     med.append(statistics.median(temp))
+    mean_error.append(statistics.mean(temp))
+    std.append(statistics.stdev(temp))
 plt.clf()
-plt.plot(z_plot,med)
+plt.plot(z_plot,med,label="Median")
+plt.errorbar(z_plot,mean_error,std,label="Mean")
 plt.xlabel("z")
 plt.ylabel("Error")
-plt.title("Median of Error")
-plt.savefig("medianerror.png")
+plt.title("Error")
+plt.legend()
+plt.savefig("centralerror.png")

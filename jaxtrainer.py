@@ -99,7 +99,7 @@ y_test=jnp.ones((100,256))
 for i in range(100):
     temp=npy_loader("data/"+str(i+900)+".npy")
     y_test.at[i,:].set(temp[1,:])
-y_pred=predict(params,x_test)
+y_pred=batched_predict(params,x_test)
 print(y_pred)
 error=abs(y_pred/y_test-1)
 print("Max error =",jnp.max(error)*100,"%")

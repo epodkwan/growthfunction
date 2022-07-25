@@ -13,18 +13,11 @@ def npy_loader(path):
 
 # %%
 input_data=npy_loader("data/cosmo.npy")
+input_result=npy_loader("combined.npy")
 x_train=jnp.stack((input_data[0:800,0],input_data[0:800,2]),axis=1)
-y_train=np.ones((800,256))
-for i in range(800):
-    temp=npy_loader("data/"+str(i)+".npy")
-    # y_train.at[i,:].set(temp[1,:])
-    y_train[i,:]=temp[1,:]
+y_train=input_result[0:800,:]
 x_validate=jnp.stack((input_data[800:900,0],input_data[800:900,2]),axis=1)
-y_validate=np.ones((100,256))
-for i in range(100):
-    temp=npy_loader("data/"+str(i+800)+".npy")
-    # y_validate.at[i,:].set(temp[1,:])
-    y_validate[i,:]=temp[1,:]
+y_validate=input_result[800:900,:]
 
 # %%
 def random_layer_params(m,n,key,scale=1e-2):
@@ -38,8 +31,8 @@ def init_network_params(sizes,key):
 
 # %%
 layer_sizes=[2,64,256,256,256]
-learning_rate=1e1
-epochs=1000
+learning_rate=1e0
+epochs=10000
 params=init_network_params(layer_sizes,random.PRNGKey(0))
 
 # %%
@@ -99,11 +92,7 @@ plt.savefig("loss.png")
 
 # %%
 x_test=jnp.stack((input_data[900:1000,0],input_data[900:1000,2]),axis=1)
-y_test=np.ones((100,256))
-for i in range(100):
-    temp=npy_loader("data/"+str(i+900)+".npy")
-    # y_test.at[i,:].set(temp[1,:])
-    y_test[i,:]=temp[1,:]
+y_test=input_result[900:1000,:]
 y_pred=batched_predict(params,x_test)
 print(y_pred)
 error=abs(y_pred/y_test-1)

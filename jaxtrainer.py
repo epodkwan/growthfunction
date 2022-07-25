@@ -67,37 +67,40 @@ opt_state=opt_init(params)
 @jit
 def train_step(step_i,opt_state,x,y_ref):
     params=get_params(opt_state)
-    loss,grads=value_and_grad(mse_loss,argnums=0)(params,x,y_ref)
+    loss,grads=jax.value_and_grad(mse_loss,argnums=0)(params,x,y_ref)
     return loss,opt_update(step_i,grads,opt_state)
 
 # %%
+order=jnp.arange(800)
 for i in range(epochs):
+    random.permutation(random.PRNGKey(0),order)
     train_loss=0
     for j in range(25):
         x_batch=x_train[order[32*j:32*(j+1)-1],:]
         y_batch=y_train[order[32*j:32*(j+1)-1],:]
-        training_loss,opt_state=train_step(learning_rate,x_batch,opt_state)
+        loss,opt_state=train_step(learning_rate,opt_state,x_batch,y_batch)
+        train_loss=train_loss+loss
     if i % 100 == 99:
-        print((i+1),loss.item())
+        print((i+1),train_loss)
         train_loss=train_loss/25
-        y_pred=model(x_validate)
-        validate_loss=loss_fn(y_pred,y_validate)
-        plt.scatter((i+1),jnp.log(train_loss.detach()),c='b')
-        plt.scatter((i+1),jnp.log(validate_loss.detach()),c='g')
+    #     y_pred=predict(params,x_validate)
+    #     validate_loss=loss_fn(y_pred,y_validate)
+        plt.scatter((i+1),jnp.log(train_loss),c='b')
+    #     plt.scatter((i+1),jnp.log(validate_loss),c='g')
 print("Training ended")
 plt.xlabel("Epoch")
 plt.ylabel("ln(loss)")
 plt.title("Loss function")
-plt.legend(["Training Loss","Validation Loss"])
+# plt.legend(["Training Loss","Validation Loss"])
 plt.savefig("loss.png")
 
 # %%
-x_test=jnp.stack((input_data[900:1000,0],input_data[900:1000,2]),axis=1)
-y_test=jnp.ones((100,256))
-for i in range(100):
-    temp=npy_loader("data/"+str(i+900)+".npy")
-    y_test.at[i,:].set(temp[1,:])
-y_pred=model(x_test).clone().detach()
-print(y_pred)
-error=abs(y_pred/y_test-1)
-print("Max error =",jnp.max(error).item()*100,"%")
+# x_test=jnp.stack((input_data[900:1000,0],input_data[900:1000,2]),axis=1)
+# y_test=jnp.ones((100,256))
+# for i in range(100):
+#     temp=npy_loader("data/"+str(i+900)+".npy")
+#     y_test.at[i,:].set(temp[1,:])
+# y_pred=model(x_test).clone().detach()
+# print(y_pred)
+# error=abs(y_pred/y_test-1)
+# print("Max error =",jnp.max(error)*100,"%")

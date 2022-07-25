@@ -37,7 +37,7 @@ def init_network_params(sizes,key):
 # %%
 layer_sizes=[2,64,256,256,256]
 learning_rate=1e1
-epochs=1000
+epochs=2000
 params=init_network_params(layer_sizes,random.PRNGKey(0))
 
 # %%
@@ -79,11 +79,12 @@ for i in range(epochs):
         x_batch=x_train[order[32*j:32*(j+1)-1],:]
         y_batch=y_train[order[32*j:32*(j+1)-1],:]
         loss,opt_state=train_step(learning_rate,opt_state,x_batch,y_batch)
+        params=get_params(opt_state)
         train_loss=train_loss+loss
-    if i % 100 == 99:
-        print((i+1),train_loss)
+    if i % 10 == 9:
         train_loss=train_loss/25
         validate_loss=mse_loss(params,x_validate,y_validate)
+        print((i+1),validate_loss)
         plt.scatter((i+1),jnp.log(train_loss),c='b')
         plt.scatter((i+1),jnp.log(validate_loss),c='g')
 print("Training ended")

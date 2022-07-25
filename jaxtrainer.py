@@ -14,15 +14,17 @@ def npy_loader(path):
 # %%
 input_data=npy_loader("data/cosmo.npy")
 x_train=jnp.stack((input_data[0:800,0],input_data[0:800,2]),axis=1)
-y_train=jnp.ones((800,256))
+y_train=np.ones((800,256))
 for i in range(800):
     temp=npy_loader("data/"+str(i)+".npy")
-    y_train.at[i,:].set(temp[1,:])
+    # y_train.at[i,:].set(temp[1,:])
+    y_train[i,:]=temp[1,:]
 x_validate=jnp.stack((input_data[800:900,0],input_data[800:900,2]),axis=1)
-y_validate=jnp.ones((100,256))
+y_validate=np.ones((100,256))
 for i in range(100):
     temp=npy_loader("data/"+str(i+800)+".npy")
-    y_validate.at[i,:].set(temp[1,:])
+    # y_validate.at[i,:].set(temp[1,:])
+    y_validate[i,:]=temp[1,:]
 
 # %%
 def random_layer_params(m,n,key,scale=1e-2):
@@ -37,7 +39,7 @@ def init_network_params(sizes,key):
 # %%
 layer_sizes=[2,64,256,256,256]
 learning_rate=1e1
-epochs=2000
+epochs=1000
 params=init_network_params(layer_sizes,random.PRNGKey(0))
 
 # %%
@@ -88,6 +90,7 @@ for i in range(epochs):
         plt.scatter((i+1),jnp.log(train_loss),c='b')
         plt.scatter((i+1),jnp.log(validate_loss),c='g')
 print("Training ended")
+jnp.save("model.npy",params)
 plt.xlabel("Epoch")
 plt.ylabel("ln(loss)")
 plt.title("Loss function")
@@ -96,10 +99,11 @@ plt.savefig("loss.png")
 
 # %%
 x_test=jnp.stack((input_data[900:1000,0],input_data[900:1000,2]),axis=1)
-y_test=jnp.ones((100,256))
+y_test=np.ones((100,256))
 for i in range(100):
     temp=npy_loader("data/"+str(i+900)+".npy")
-    y_test.at[i,:].set(temp[1,:])
+    # y_test.at[i,:].set(temp[1,:])
+    y_test[i,:]=temp[1,:]
 y_pred=batched_predict(params,x_test)
 print(y_pred)
 error=abs(y_pred/y_test-1)

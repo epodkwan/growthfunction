@@ -49,7 +49,7 @@ def mse_loss(params,x,y_ref):
     return jnp.mean(diff*diff)
 
 #%%
-tx=optax.adam(learning_rate=learning_rate)
+tx=optax.adam(learning_rate=learning_rate,b1=0.9,b2=0.999)
 opt_state=tx.init(params)
 
 # %%
@@ -61,6 +61,8 @@ def train_step(params,opt_state,x,y_ref):
     return loss,params,opt_state
 
 # %%
+t_loss=[]
+v_loss=[]
 order=jnp.arange(800)
 for i in range(epochs):
     random.permutation(random.PRNGKey(i),order)
@@ -70,18 +72,23 @@ for i in range(epochs):
         y_batch=y_train[order[32*j:32*(j+1)-1],:]
         loss,params,opt_state=train_step(params,opt_state,x_batch,y_batch)
         train_loss=train_loss+loss
-    if i % 10 == 9:
+    if i % 100 == 99:
         train_loss=train_loss/25
         validate_loss=mse_loss(params,x_validate,y_validate)
         print((i+1),validate_loss)
-        plt.scatter((i+1),jnp.log(train_loss),c='b')
-        plt.scatter((i+1),jnp.log(validate_loss),c='g')
+        t_loss.append(train_loss)
+        v_loss.append(validate_loss)
+        # plt.scatter((i+1),jnp.log(train_loss),c='b')
+        # plt.scatter((i+1),jnp.log(validate_loss),c='g')
 print("Training ended")
 jnp.save("model.npy",params)
+loop_no=jnp.linspace(0,epochs,int(epochs/100+1))
+plt.plot(loop_no,jnp.log(t_loss),label="Training Loss")
+plt.plot(loop_no,jnp.log(v_loss),label="Validation Loss")
 plt.xlabel("Epoch")
 plt.ylabel("ln(loss)")
 plt.title("Loss function")
-plt.legend(["Training Loss","Validation Loss"])
+plt.legend()
 plt.savefig("loss.png")
 
 # %%

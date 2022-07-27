@@ -40,6 +40,8 @@ epochs=30000
 model=SimpleMLP(features=layer_sizes)
 temp=jnp.ones(2)
 params=model.init(random.PRNGKey(0),temp)
+tx=optax.sgd(learning_rate=learning_rate,momentum=0.9)
+opt_state=tx.init(params)
 
 # %%
 @jit
@@ -47,10 +49,6 @@ def mse_loss(params,x,y_ref):
     preds=model.apply(params,x)
     diff=preds-y_ref
     return jnp.mean(diff*diff)
-
-#%%
-tx=optax.adam(learning_rate=learning_rate,b1=0.9,b2=0.999)
-opt_state=tx.init(params)
 
 # %%
 @jit
@@ -63,7 +61,7 @@ def train_step(params,opt_state,x,y_ref):
 # %%
 order=jnp.arange(800)
 for i in range(epochs):
-    random.permutation(random.PRNGKey(i),order)
+    order=random.permutation(random.PRNGKey(i),order)
     train_loss=0
     for j in range(25):
         x_batch=x_train[order[32*j:32*(j+1)-1],:]

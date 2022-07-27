@@ -36,7 +36,7 @@ class SimpleMLP(nn.Module):
 # %%
 layer_sizes=[64,256,256,256]
 learning_rate=1e1
-epochs=1000
+epochs=30000
 model=SimpleMLP(features=layer_sizes)
 temp=jnp.ones(2)
 params=model.init(random.PRNGKey(0),temp)
@@ -61,8 +61,6 @@ def train_step(params,opt_state,x,y_ref):
     return loss,params,opt_state
 
 # %%
-t_loss=[]
-v_loss=[]
 order=jnp.arange(800)
 for i in range(epochs):
     random.permutation(random.PRNGKey(i),order)
@@ -76,19 +74,14 @@ for i in range(epochs):
         train_loss=train_loss/25
         validate_loss=mse_loss(params,x_validate,y_validate)
         print((i+1),validate_loss)
-        t_loss.append(train_loss)
-        v_loss.append(validate_loss)
-        # plt.scatter((i+1),jnp.log(train_loss),c='b')
-        # plt.scatter((i+1),jnp.log(validate_loss),c='g')
+        plt.scatter((i+1),jnp.log(train_loss),c='b')
+        plt.scatter((i+1),jnp.log(validate_loss),c='g')
 print("Training ended")
 jnp.save("model.npy",params)
-loop_no=jnp.linspace(0,epochs,int(epochs/100+1))
-plt.plot(loop_no,jnp.log(t_loss),label="Training Loss")
-plt.plot(loop_no,jnp.log(v_loss),label="Validation Loss")
 plt.xlabel("Epoch")
 plt.ylabel("ln(loss)")
 plt.title("Loss function")
-plt.legend()
+plt.legend(["Training Loss","Validation Loss"])
 plt.savefig("loss.png")
 
 # %%

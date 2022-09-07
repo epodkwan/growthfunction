@@ -47,8 +47,8 @@ class Growth_MLP():
             cosmo = jnp.reshape(cosmo, (1, -1))
         t,c = self.model.apply(params, cosmo)
         g = deBoor(jnp.clip(a,0,0.99999),t,c)
-        # g1 = deBoor(jnp.array([0.99999]),t,c)
-        g = g
+        g1 = deBoor(jnp.array([0.99999]),t,c)
+        g = g/g1
         if reshape: 
             return g[0]
         else: 

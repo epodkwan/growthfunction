@@ -320,10 +320,11 @@ def growth_integ(cosmo):
     G = jnp.concatenate((G, G_deriv[..., -1:]), axis=2)
     G = jnp.moveaxis(G, 0, 2)
 
+    m = jnp.array((1, 2), dtype=conf.cosmo_dtype)[:, jnp.newaxis]
     growth = jnp.stack((
         G[:, 0],
-        G[:, 0] + G[:, 1],
-        G[:, 0] + 2*G[:, 1] + G[:, 2],
+        m * G[:, 0] + G[:, 1],
+        m**2 * G[:, 0] + 2 * m * G[:, 1] + G[:, 2],
     ), axis=1)
 
     return cosmo.replace(growth=growth)
